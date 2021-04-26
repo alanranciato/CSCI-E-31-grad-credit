@@ -23,7 +23,7 @@ block content
         li Make sure you're trying to access the right port 
         li Check your /bin/www file for the line:
         br
-        code var port = normalizePort(process.env.PORT || '3000');
+        code var port = normalizePort(process.env.PORT || '8080');
         br
         br
         li Validate that the URL you're using is pointing to the correct port as in:  
@@ -76,7 +76,8 @@ block content
         li Open the correct port 
         br
         p type: 
-          code sudo ufw allow 3000 {OR WHATEVER YOUR PORT IS}
+          code sudo ufw allow 8080 {OR WHATEVER YOUR PORT IS}
+        p.warn NOTE: By default, Digital Ocean maps port 80 to port 3000 - so you may not see this in the  list
   br
   hr
   br
