@@ -1,0 +1,101 @@
+extends layout
+
+block content
+  h1 My Node Says Nope
+  p.lead This site is a troubleshooting FAQ to help you get up and running when your Node app isn't accessible.
+  p
+    img(src="../images/404.png", alt="404 Image").border
+  p
+    br
+    br
+    br
+  p  
+  p  
+
+  h2 Troubleshooting Steps  
+  hr
+  h4 You try to access in your browser and are getting a 404 error
+  p
+    br
+    h5 Let's check your setup 
+    div
+      ul
+        li Make sure you're trying to access the right port 
+        li Check your /bin/www file for the line:
+        br
+        code var port = normalizePort(process.env.PORT || '3000');
+        br
+        br
+        li Validate that the URL you're using is pointing to the correct port as in:  
+        br
+        code http://mydomain:PORT
+
+  h5 Now, let's be sure the NPM server is running 
+  h6 We're going to troubleshoot our Digital Ocean instance 
+  ul 
+    li Log into Digital Ocean 
+    li Open your instance from the control panel 
+    li Click the Console link on the right 
+    li Once the console loads, check to see if Node is running 
+    li Search for the node process by listing the processes running and filtering by node
+    br
+    p type: 
+      code  ps -ef | grep node 
+        p 
+        img(src="../images/grepNode.png", alt="grep image" width="50%" height="50%" ).border
+    p
+      p You should see something like the image above.  If you don't see a node process running (ignore the line that starts with 'grep' - that's your search), navigate to your code directory 
+      li change directories to where your code is running 
+        p type: 
+          code cd /git/MYREPO - or whereever your code is located 
+      li try starting Node: 
+      br
+      p type: 
+        code npm start 
+        br
+        span (we're just going to run it in the console to troubleshoot.  We'll run it in the background before we leave)
+  ul 
+    li if you receive an error, check the following 
+     ul 
+      li After pulling the code from your source repository you've run 
+        code npm install
+      li If you have a configuration/env file that is required, but excluded due to an ignore rule (.gitignore), make sure to create the file 
+      li If you are accessing a database (e.g. Mongo Atlas), make sure your connections are not blocked (you may need to whitelist your IP at the external site)
+    br
+    li if node starts correctly and you still can't access the site, be sure your DO environment isn't blocking the port
+      ul
+        li Check to see what ports are open on your DO firewall 
+        br
+        p type: 
+          code ufw status 
+        li You should see an output like the image below.  If your <code>/bin/www</code> setup is pointing to a port not listed, you will need to open that firewall port 
+        br
+        img(src="../images/ufwstatus.png", alt="")
+        br
+        br
+        li Open the correct port 
+        br
+        p type: 
+          code sudo ufw allow 3000 {OR WHATEVER YOUR PORT IS}
+  br
+  hr
+  br
+  h4 You've checked everything above and your site works when you are logged into DO, but not after you logout
+  p This one should be easy.  You need to be sure you're running Node in the background as a child process using the nohup (No Hangup) and &amp; (child process) commands 
+  ul 
+    li Start Node in the background
+    p type: 
+      code nohup npm start &
+    li This will bring you back to a prompt where you can check to be sure the npm process is running via the command we used earlier 
+    p type: 
+        code  ps -ef | grep node 
+          p 
+          img(src="../images/grepNode.png", alt="grep image" width="50%" height="50%" ).border
+  br
+  hr
+  br
+  h4 You're application is serving pages, but you're getting a 5xx error 
+  p This is likely an application error.  
+  p Be sure everything works in your development environment first.  If it does, start your node server in the terminal and watch the output for errors as you hit the page from your browser.
+
+
